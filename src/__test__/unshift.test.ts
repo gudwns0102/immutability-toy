@@ -38,7 +38,6 @@ describe('push', () => {
       const command = { d: { $push: [5] } };
       const nextState: any = update(state, command);
 
-
       expect(nextState).not.toBe(state);
       expect(nextState.a).toBe(state.a);
       expect(nextState.d).toEqual([1, 2, 3, 4, 5]);
