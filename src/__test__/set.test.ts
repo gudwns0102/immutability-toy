@@ -20,7 +20,7 @@ describe('set', () => {
       expect(nextState).toEqual(state);
     });
 
-    it.only('Simple command', () => {
+    it('Simple command', () => {
       const state = { a: 1, b: { c: 2 } };
       const command: SetCommand = { $set: 1 };
       const nextState = update(state, command);
@@ -40,11 +40,19 @@ describe('set', () => {
   })
 
   describe('recursive cases', () => {
-    const state = { a: 1, b: { c: 2 } };
-    const command = { a: { $set: 3 } };
-    const nextState = update(state, command);
-    expect(nextState).not.toBe(state);
-    expect(nextState).toEqual({ a: 3, b: { c: 2 } });
-    expect((nextState as any).b).toBe(state.b);
+    let state;
+    beforeEach(() => {
+      state = { a: 1, b: { c: 2 } };
+    })
+    it('Updated 1 nested key', () => {
+      const state = { a: 1, b: { c: 2 } };
+      const command = { a: { $set: 3 } };
+      const nextState = update(state, command);
+      expect(nextState).not.toBe(state);
+      expect(nextState).toEqual({ a: 3, b: { c: 2 } });
+      expect((nextState as any).b).toBe(state.b);
+    })
+
+
   })
 })
