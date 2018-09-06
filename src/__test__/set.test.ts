@@ -20,7 +20,16 @@ describe('set', () => {
       expect(nextState).toEqual(state);
     });
 
-    it('Simple command', () => {
+    it.only('Simple command', () => {
+      const state = { a: 1, b: { c: 2 } };
+      const command: SetCommand = { $set: 1 };
+      const nextState = update(state, command);
+
+      expect(nextState).not.toBe(state);
+      expect(nextState).toEqual(1);
+    });
+
+    it('Simple command with object', () => {
       const state = { a: 1, b: { c: 2 } };
       const command: SetCommand = { $set: { x: 1 } };
       const nextState = update(state, command);
