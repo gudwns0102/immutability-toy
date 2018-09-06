@@ -1,5 +1,6 @@
 import {
   Command,
+  SplicePayload
 } from './index.d';
 
 const update = (state: any, command: any): object => {
@@ -20,6 +21,19 @@ const update = (state: any, command: any): object => {
     throw new Error('$unshift: Command is not valid for state');
   } else if (commandKey === '$apply') {
     return (trim(command) as Function)(state);
+  } else if (commandKey === '$merge') {
+    if (state && state.constructor === Object) {
+      return { ...state, ...trim(command) };
+    }
+
+    throw new Error('$merge: Command is not valid for state');
+  } else if (commandKey === '$splice') {
+    if (state && state.constructor === Array) {
+      const trimResult: SplicePayload = trim(command);
+      const copy = [...state];
+      Array.prototype.splice.apply(copy, trimResult[0]);
+      return [...copy];
+    }
   } else { // Command is nested or have not existed. In latter case, the command is malformed
     if (command && command.constructor === Object) {
       const keys = Object.keys(command);
@@ -43,7 +57,7 @@ const update = (state: any, command: any): object => {
 }
 
 export const isCommand = (command: any): Command | boolean => {
-  const commands: Command[] = ['$set', '$push', '$unshift', '$apply'];
+  const commands: Command[] = ['$set', '$push', '$unshift', '$apply', '$merge', '$splice'];
   if (command && command.constructor === Object) {
     const keys: string[] = Object.keys(command);
     const commandKey = keys.find((key: string) => commands.includes(key as any)) as Command | undefined;
@@ -56,6 +70,12 @@ export const isCommand = (command: any): Command | boolean => {
         $push: ($payload: any) => $payload && $payload.constructor === Array,
         $unshift: ($payload: any) => $payload && $payload.constructor === Array,
         $apply: ($payload: any) => $payload && $payload.constructor === Function,
+        $merge: ($payload: any) => $payload && $payload.constructor === Object,
+        $splice: ($payload: any) =>
+          $payload &&
+          $payload.constructor === Array &&
+          $payload[0].constructor === Array &&
+          typeof $payload[0][0] === 'number',
       }
 
       const typeValid = typeChecker[commandKey](payload);
@@ -74,19 +94,5 @@ export const isCommand = (command: any): Command | boolean => {
 export const trim = (command: any) => {
   return command[Object.keys(command)[0]];
 }
-
-// export const hasNestedKey = (state: { [key: string]: any }, keys: string[]) => {
-//   let walker = state;
-//   while (keys.length) {
-//     const key = keys.shift();
-//     if (!key || !walker[key]) {
-//       return false;
-//     }
-
-//     walker = walker[key];
-//   }
-
-//   return true;
-// }
 
 export default update;

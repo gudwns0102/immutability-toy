@@ -1,12 +1,12 @@
 export type update = (state: object, modifier: object) => object;
 
-export type Command = '$set' | '$push' | '$unshift' | '$apply';
+export type Command = '$set' | '$push' | '$unshift' | '$apply' | '$merge' | '$splice';
 
-export type SetCommand = {
+export class SetCommand {
   $set: any;
 }
 
-export type PushCommand = {
+export class PushCommand {
   $push: Array<any>;
 }
 
@@ -16,4 +16,20 @@ export class UnshiftCommand {
 
 export class ApplyCommand {
   $apply: (...args: any[]) => any;
+}
+
+export class MergeCommand {
+  $merge: object;
+}
+
+export class SpliceCommand {
+  $splice: SplicePayload;
+}
+
+export type SplicePayload = {
+  0: {
+    [index: number]: any,
+    0: number;
+    1?: number;
+  }
 }
