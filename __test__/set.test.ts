@@ -1,5 +1,5 @@
-import update from '../';
-import { SetCommand } from '../index.d';
+import update from '../src';
+import { SetCommand } from '../src/index.d';
 
 describe('set', () => {
   describe('primitive cases', () => {

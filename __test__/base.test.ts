@@ -1,4 +1,4 @@
-import update from '../';
+import update from '../src';
 
 describe("update", () => {
   describe("has a #$set method that", () => {

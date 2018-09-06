@@ -1,4 +1,4 @@
-import { isCommand } from '../';
+import isCommand from '../src/lib/isCommand';
 
 describe('isCommand', () => {
   it('$set command', () => {

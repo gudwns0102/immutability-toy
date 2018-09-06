@@ -1,5 +1,5 @@
-import update from '../';
-import { ApplyCommand } from '../index.d';
+import update from '../src';
+import { ApplyCommand } from '../src/index.d';
 
 describe('apply', () => {
   describe('primitive cases', () => {

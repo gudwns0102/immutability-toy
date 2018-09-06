@@ -1,15 +1,15 @@
-import update from '../index';
-import { UnshiftCommand } from '../index.d';
+import update from '../src/index';
+import { PushCommand } from '../src/index.d';
 
 describe('push', () => {
   describe('primitive cases', () => {
     it('Simple Command', () => {
       const state = [1, 2, 3, 4];
-      const command: UnshiftCommand = { $unshift: [0] };
+      const command: PushCommand = { $push: [5] };
       const nextState = update(state, command);
 
       expect(nextState).not.toBe(state);
-      expect(nextState).toEqual([0, 1, 2, 3, 4]);
+      expect(nextState).toEqual([1, 2, 3, 4, 5]);
     });
   });
 
@@ -41,6 +41,6 @@ describe('push', () => {
       expect(nextState).not.toBe(state);
       expect(nextState.a).toBe(state.a);
       expect(nextState.d).toEqual([1, 2, 3, 4, 5]);
-    })
+    });
   })
 })
