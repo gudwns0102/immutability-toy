@@ -1,6 +1,6 @@
 export type update = (state: object, modifier: object) => object;
 
-export type Command = '$set' | '$push' | '$unshift';
+export type Command = '$set' | '$push' | '$unshift' | '$apply';
 
 export type SetCommand = {
   $set: any;
@@ -12,4 +12,8 @@ export type PushCommand = {
 
 export class UnshiftCommand {
   $unshift: Array<any>;
+}
+
+export class ApplyCommand {
+  $apply: (...args: any[]) => any;
 }
